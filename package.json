@@ -1,0 +1,48 @@
+{
+  "name": "farm-supply-chain",
+  "version": "1.0.0",
+  "description": "A blockchain-based supply chain management system for farm produce",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "truffle test",
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "migrate:reset": "truffle migrate --reset",
+    "networks": "truffle networks",
+    "console": "truffle console",
+    "frontend": "cd groot && npm start",
+    "frontend:install": "cd groot && npm install",
+    "dev": "concurrently \"npm run ganache\" \"npm run frontend\"",
+    "ganache": "ganache-cli -p 7545 -h 0.0.0.0 --accounts 10 --defaultBalanceEther 100 --mnemonic 'myth like bonus scare over problem client lizard pioneer submit female collect'"
+  },
+  "keywords": [
+    "blockchain",
+    "supply-chain",
+    "ethereum",
+    "truffle",
+    "solidity",
+    "farm-produce",
+    "traceability"
+  ],
+  "author": "Farm Supply Chain Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "ganache-cli": "^6.12.2",
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RADIAN1308/grootProject.git"
+  },
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}

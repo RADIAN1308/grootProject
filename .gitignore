@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+groot/node_modules/
+
+# Build outputs
+build/
+groot/build/
+dist/
+
+# Environment files with secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Truffle
+.secret
+
+# Ganache
+ganache-db/
+
+# Package lock files (optional - some teams prefer to commit these)
+package-lock.json
+groot/package-lock.json
+
+# Temporary files
+*.tmp
+*.temp

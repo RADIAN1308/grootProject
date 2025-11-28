@@ -1,38 +1,405 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f5f5;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.App-header {
+  background: linear-gradient(135deg, #2c5530 0%, #4a7c59 100%);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.account-info {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.account-info p {
+  margin: 5px 0;
+}
+
+.navigation {
+  background: white;
+  border-bottom: 1px solid #ddd;
+  padding: 0 20px;
+  display: flex;
+  gap: 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.navigation button {
+  padding: 15px 25px;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.navigation button:hover {
+  background: #f8f9fa;
+  color: #2c5530;
+}
+
+.navigation button.active {
+  color: #2c5530;
+  border-bottom-color: #2c5530;
+  background: #f8f9fa;
+}
+
+.main-content {
+  flex: 1;
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Dashboard Styles */
+.dashboard h2 {
+  color: #2c5530;
+  margin-bottom: 30px;
+  font-size: 2rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.product-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.product-card h3 {
+  color: #2c5530;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 10px;
+}
+
+.product-card p {
+  margin: 8px 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+.product-card strong {
+  color: #333;
+}
+
+.product-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.product-actions button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 120px;
+}
+
+.product-actions button:first-child {
+  background: #6c757d;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.product-actions button:first-child:hover {
+  background: #5a6268;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.purchase-btn {
+  background: #28a745 !important;
+  color: white !important;
+}
+
+.purchase-btn:hover {
+  background: #218838 !important;
+}
+
+/* Product History */
+.product-history {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  margin-top: 30px;
+}
+
+.product-history h3 {
+  color: #2c5530;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.history-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.history-entry {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #2c5530;
+}
+
+.history-state {
+  background: #2c5530;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  height: fit-content;
+  white-space: nowrap;
+}
+
+.history-details p {
+  margin: 5px 0;
+  color: #666;
+}
+
+/* Forms */
+.register-form, .create-product, .manage-products {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.register-form h2, .create-product h2, .manage-products h2 {
+  color: #2c5530;
+  margin-bottom: 30px;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus, 
+.form-group select:focus, 
+.form-group textarea:focus {
+  outline: none;
+  border-color: #4a7c59;
+  box-shadow: 0 0 0 3px rgba(44, 85, 48, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 15px;
+  background: #2c5530;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: #1e3a21;
+}
+
+button[type="submit"]:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Management Sections */
+.management-section {
+  background: #f8f9fa;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.management-section h3 {
+  color: #2c5530;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+}
+
+/* Already Registered */
+.already-registered {
+  text-align: center;
+  padding: 60px 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.already-registered h2 {
+  color: #2c5530;
+  margin-bottom: 20px;
+}
+
+.already-registered p {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Loading States */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.loading h2 {
+  color: #2c5530;
+  margin-bottom: 15px;
+}
+
+/* Warning Messages */
+.warning {
+  color: #dc3545;
+  font-weight: 500;
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .App-header h1 {
+    font-size: 2rem;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .navigation {
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+  
+  .navigation button {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 15px;
+  }
+  
+  .main-content {
+    padding: 20px 15px;
+  }
+  
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .register-form, .create-product, .manage-products {
+    padding: 30px 20px;
+    margin: 0 10px;
+  }
+  
+  .history-entry {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .product-actions {
+    flex-direction: column;
+  }
+  
+  .product-actions button {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header {
+    padding: 15px;
+  }
+  
+  .App-header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .account-info {
+    font-size: 0.8rem;
+  }
+  
+  .navigation button {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .register-form, .create-product, .manage-products {
+    padding: 20px 15px;
   }
 }
