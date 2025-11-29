@@ -1,0 +1,417 @@
+================================================================================
+                    FARM SUPPLY CHAIN APPLICATION - USER MANUAL
+================================================================================
+
+TABLE OF CONTENTS
+================================================================================
+1. Introduction
+2. System Requirements  
+3. Initial Setup
+4. Starting the Application
+5. Application Interface Guide
+6. Account Management
+7. Understanding Product States
+8. Security & Best Practices
+9. Troubleshooting
+10. Advanced Features
+11. Complete Workflow Example
+12. Support & Resources
+13. Getting Started Checklist
+
+================================================================================
+1. INTRODUCTION
+================================================================================
+
+Welcome to the Farm Supply Chain Management System! This blockchain-based 
+application tracks farm produce from harvest to consumer, ensuring transparency, 
+traceability, and trust throughout the entire supply chain.
+
+Key Features:
+- Blockchain-based product tracking
+- Multi-actor supply chain management
+- Complete ownership history
+- Immutable audit trails
+- Real-time product state updates
+- Secure MetaMask integration
+
+================================================================================
+2. SYSTEM REQUIREMENTS
+================================================================================
+
+SOFTWARE REQUIRED:
+- Node.js (v14 or higher)
+- MetaMask Browser Extension
+- Ganache (for local blockchain)
+- Modern Web Browser (Chrome, Firefox, Edge)
+
+HARDWARE REQUIREMENTS:
+- RAM: 4GB minimum, 8GB recommended
+- Storage: 2GB free space
+- Network: Internet connection for initial setup
+
+================================================================================
+3. INITIAL SETUP
+================================================================================
+
+STEP 1: INSTALL DEPENDENCIES
+Open Command Prompt and navigate to project directory:
+
+cd "d:\Blockchain\grootProject\grootProject"
+npm install
+cd groot
+npm install
+
+STEP 2: START GANACHE
+1. Open Ganache Desktop application
+2. Create a new workspace or use existing
+3. Configure settings:
+   - Port: 7545
+   - Network ID: Any (will auto-configure)
+   - Accounts: 10 accounts with 100 ETH each
+
+STEP 3: DEPLOY SMART CONTRACTS
+From main project directory:
+
+cd "d:\Blockchain\grootProject\grootProject"
+truffle migrate --reset
+
+STEP 4: CONFIGURE METAMASK
+1. Install MetaMask browser extension
+2. Add Ganache Network:
+   - Network Name: Ganache Local
+   - RPC URL: http://127.0.0.1:7545
+   - Chain ID: 1337
+   - Currency Symbol: ETH
+
+3. Import Ganache Account:
+   - Open Ganache → Copy private key from any account
+   - MetaMask → Import Account → Paste private key
+
+================================================================================
+4. STARTING THE APPLICATION
+================================================================================
+
+OPTION A: USING BATCH FILE (RECOMMENDED)
+1. Double-click "start-frontend.bat" in the groot folder
+2. Follow the checklist prompts
+3. Press any key to continue
+4. Application opens at http://localhost:3000
+
+OPTION B: MANUAL START
+cd "d:\Blockchain\grootProject\grootProject\groot"
+npm start
+
+================================================================================
+5. APPLICATION INTERFACE GUIDE
+================================================================================
+
+DASHBOARD TAB
+Purpose: Overview of all products in the supply chain
+
+Features:
+- Product Grid: Visual cards showing all products
+- Search Bar: Filter products by name or ID
+- Product Details: Name, type, quantity, price, current state
+- Owner Information: Current product owner address
+- Status Indicators: Color-coded state badges
+
+How to Use:
+1. View Products: Scroll through product cards
+2. Search: Type in search bar to filter products
+3. Check Status: Look at colored badges (Harvested, Processed, etc.)
+4. Identify Ownership: Green "Owned by you" indicator
+
+REGISTER ACTOR TAB
+Purpose: Register yourself in the supply chain with a specific role
+
+Actor Types:
+- Farmer: Creates/harvests products
+- Processor: Processes raw farm products
+- Distributor: Ships products to retailers
+- Retailer: Sells to end consumers
+
+Registration Process:
+1. Enter Name: Your business/farm name
+2. Enter Location: Physical address or region
+3. Select Actor Type: Choose your role in supply chain
+4. Click Register: Submit to blockchain
+5. Wait for Confirmation: Transaction processes (5-10 seconds)
+
+CREATE PRODUCT TAB
+Purpose: Add new products to the supply chain (Farmers only)
+
+Required Information:
+- Product Name: Clear, descriptive name
+- Description: Detailed product information
+- Produce Type: Select from dropdown (Fruits, Vegetables, etc.)
+- Quantity: Amount in grams
+- Price: Per unit in ETH
+- Expiry Days: Days until expiration (default: 30)
+- Origin Farm: Farm location/section
+
+Creation Process:
+1. Fill all fields with product information
+2. Set reasonable price (e.g., 0.01 ETH)
+3. Click "Create Product"
+4. Confirm transaction in MetaMask
+5. Product appears in Dashboard
+
+MANAGE PRODUCTS TAB
+Purpose: Transfer products and update their states
+
+Transfer Product Section:
+Use Cases:
+- Farmer → Processor: Send harvested goods
+- Processor → Distributor: Send processed goods
+- Distributor → Retailer: Send shipped goods
+
+Steps:
+1. Get Product ID: Note ID from Dashboard
+2. Get Recipient Address: Copy from MetaMask/Ganache
+3. Enter both values in transfer form
+4. Click "Transfer Product"
+5. Confirm transaction in MetaMask
+
+Change Product State Section:
+State Progression:
+- Harvested (0): Initial state after creation
+- Processed (1): After processing activities
+- Shipped (2): When in transit
+- Received (3): When received by retailer
+- Sold (4): When purchased by consumer
+
+Steps:
+1. Enter Product ID you own
+2. Select appropriate next state
+3. Add descriptive notes (what happened)
+4. Click "Change State"
+5. Transaction confirmation
+
+PURCHASE PRODUCTS TAB
+Purpose: Buy products as end consumer
+
+Purchase Process:
+1. Find Product ID from Dashboard (must be in "Received" state)
+2. Enter Product ID in purchase form
+3. Click "Purchase Product"
+4. MetaMask shows exact ETH amount needed
+5. Confirm transaction with sufficient funds
+6. Product ownership transfers to you
+
+Requirements:
+- Product must be in "Received" state
+- Your account must have sufficient ETH
+- Transaction gas fees will be added
+
+================================================================================
+6. ACCOUNT MANAGEMENT
+================================================================================
+
+SWITCHING ACCOUNTS
+
+Method 1: In-App Switch
+- Click "Switch Account" button in header
+- Cycles through all MetaMask accounts
+- Automatic actor status refresh
+
+Method 2: MetaMask Switch
+- Click account icon in MetaMask
+- Select different account
+- Refresh browser page
+
+Method 3: Import New Account
+- Copy private key from Ganache
+- MetaMask → Import Account
+- Use new account in application
+
+MULTI-ROLE TESTING
+1. Account 1: Register as Farmer, create products
+2. Account 2: Register as Processor, receive/process
+3. Account 3: Register as Distributor, ship products
+4. Account 4: Register as Retailer, receive for sale
+5. Account 5: Act as Consumer, purchase products
+
+================================================================================
+7. UNDERSTANDING PRODUCT STATES
+================================================================================
+
+STATE FLOW:
+Harvested → Processed → Shipped → Received → Sold
+    ↓         ↓          ↓         ↓        ↓
+  Farmer   Processor  Distributor Retailer Consumer
+
+STATE DESCRIPTIONS:
+- Harvested: Fresh from farm, ready for processing
+- Processed: Cleaned, packaged, ready for shipping
+- Shipped: In transit from processor to retailer
+- Received: At retailer, ready for consumer purchase
+- Sold: Purchased by end consumer, journey complete
+
+================================================================================
+8. SECURITY & BEST PRACTICES
+================================================================================
+
+ACCOUNT SECURITY:
+- Never share private keys publicly
+- Use different accounts for different roles
+- Keep MetaMask locked when not using
+- Backup your accounts securely
+
+TRANSACTION SAFETY:
+- Double-check addresses before transfers
+- Verify product IDs before transactions
+- Confirm gas fees are reasonable
+- Wait for confirmations before proceeding
+
+TESTING RECOMMENDATIONS:
+- Start with small amounts for testing
+- Use test accounts only (not real money)
+- Reset Ganache for fresh testing environments
+- Keep transaction logs for debugging
+
+================================================================================
+9. TROUBLESHOOTING
+================================================================================
+
+COMMON ISSUES & SOLUTIONS:
+
+"Please switch to Ganache network"
+- Solution: Change MetaMask network to "Ganache Local"
+- Check: Chain ID should be 1337
+
+"Failed to connect to smart contract"
+- Solution: Ensure contracts are deployed
+- Run: truffle migrate --reset
+
+"MetaMask transaction failed"
+- Solution: Check if you have sufficient ETH for gas
+- Try: Increasing gas limit in MetaMask
+
+"Product not found"
+- Solution: Verify product ID exists in Dashboard
+- Check: Product hasn't been sold already
+
+"Application won't start"
+- Solution: Check if port 3000 is available
+- Try: npm start from groot directory
+
+GANACHE ISSUES:
+- Port conflicts: Change Ganache to different port
+- Account issues: Import fresh account from Ganache
+- Connection timeout: Restart Ganache and redeploy contracts
+
+================================================================================
+10. ADVANCED FEATURES
+================================================================================
+
+PRODUCT HISTORY TRACKING:
+- Every state change is permanently recorded
+- Timestamp of each transition
+- Actor responsible for each change
+- Location data where available
+- Quality notes and certificates
+
+OWNERSHIP HISTORY:
+- Complete ownership chain from farm to consumer
+- Transfer timestamps and transaction hashes
+- Actor information at each transfer point
+- Immutable audit trail for regulatory compliance
+
+SEARCH & FILTER:
+- Name-based search across all products
+- State filtering (show only shipped products)
+- Owner filtering (show only your products)
+- Type-based filtering (fruits, vegetables, etc.)
+
+================================================================================
+11. COMPLETE WORKFLOW EXAMPLE
+================================================================================
+
+SCENARIO: Organic Apple Supply Chain
+
+STEP 1: FARMER (Account A)
+1. Register as "Green Valley Farm" - Farmer
+2. Create Product: "Organic Red Apples"
+   - Type: Fruits
+   - Quantity: 5000g
+   - Price: 0.01 ETH
+   - Origin: "Orchard Block A"
+
+STEP 2: PROCESSOR (Account B)
+1. Register as "Fresh Foods Processing" - Processor
+2. Switch to Account A → Transfer product to Account B
+3. Switch to Account B → Change state to "Processed"
+   - Notes: "Washed, sorted, and packaged"
+
+STEP 3: DISTRIBUTOR (Account C)
+1. Register as "Regional Distribution Co" - Distributor
+2. Account B transfers product to Account C
+3. Account C changes state to "Shipped"
+   - Notes: "En route to Metro Grocery Store"
+
+STEP 4: RETAILER (Account D)
+1. Register as "Metro Grocery Store" - Retailer
+2. Account C transfers product to Account D
+3. Account D changes state to "Received"
+   - Notes: "Received and placed in produce section"
+
+STEP 5: CONSUMER (Account E)
+1. Browse products in Dashboard
+2. Find the apple product (now in "Received" state)
+3. Purchase product for 0.01 ETH
+4. Product state automatically becomes "Sold"
+5. View complete history of the product journey
+
+================================================================================
+12. SUPPORT & RESOURCES
+================================================================================
+
+LOG FILES:
+- Browser Console: F12 → Console (for frontend issues)
+- Ganache Logs: Check Ganache application logs
+- MetaMask: Settings → Advanced → Download logs
+
+USEFUL COMMANDS:
+# Check contract deployment
+truffle console
+SupplyChain.deployed()
+
+# Reset everything
+truffle migrate --reset
+
+# Test contract functions
+truffle test
+
+NETWORK INFORMATION:
+- Local RPC: http://127.0.0.1:7545
+- Chain ID: 1337
+- Frontend: http://localhost:3000
+- Gas Limit: 6721975
+
+================================================================================
+13. GETTING STARTED CHECKLIST
+================================================================================
+
+□ Node.js installed
+□ MetaMask browser extension installed
+□ Ganache running on port 7545
+□ Contracts deployed with "truffle migrate --reset"
+□ MetaMask configured with Ganache network
+□ Ganache account imported to MetaMask
+□ Frontend started with "start-frontend.bat"
+□ Browser opened to http://localhost:3000
+□ MetaMask connected to correct network
+□ Actor registered in application
+□ Ready to test supply chain workflows!
+
+================================================================================
+CONGRATULATIONS! You're now ready to manage farm produce on the blockchain!
+================================================================================
+
+For additional support or questions, refer to the project documentation or
+check the browser console (F12) for detailed error messages.
+
+Version: 1.0
+Last Updated: November 2024
+Project: Farm Supply Chain Management System
+Technology: Ethereum Blockchain, React, Truffle, Ganache

@@ -1,68 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import './App.css';
+import './AppNew.css';
+import SupplyChainContract from './contracts/SupplyChain.json';
 
 // You'll need to update this with your deployed contract address after migration
-const SUPPLY_CHAIN_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || '0x50f003f7681bBd65E37e79661f90BB8748f511F7';
+const SUPPLY_CHAIN_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || '0x65cF78E7450c283ae5332Ada2cF288E5dE809833';
 
-// Contract ABI - simplified version for frontend interaction
-const SUPPLY_CHAIN_ABI = [
-  {
-    "inputs": [{"name": "_name", "type": "string"}, {"name": "_location", "type": "string"}, {"name": "_actorType", "type": "string"}],
-    "name": "registerActor",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_name", "type": "string"}, {"name": "_description", "type": "string"}, {"name": "_produceType", "type": "uint8"}, {"name": "_quantity", "type": "uint256"}, {"name": "_price", "type": "uint256"}, {"name": "_expiryDate", "type": "uint256"}, {"name": "_originFarm", "type": "string"}],
-    "name": "createProduct",
-    "outputs": [{"name": "", "type": "uint256"}],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_productId", "type": "uint256"}],
-    "name": "getProduct",
-    "outputs": [{"name": "", "type": "tuple", "components": [{"name": "productId", "type": "uint256"}, {"name": "name", "type": "string"}, {"name": "description", "type": "string"}, {"name": "produceType", "type": "uint8"}, {"name": "quantity", "type": "uint256"}, {"name": "price", "type": "uint256"}, {"name": "harvestDate", "type": "uint256"}, {"name": "expiryDate", "type": "uint256"}, {"name": "originFarm", "type": "string"}, {"name": "qualityCertificates", "type": "string"}, {"name": "currentOwner", "type": "address"}, {"name": "currentState", "type": "uint8"}, {"name": "exists", "type": "bool"}]}],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_productId", "type": "uint256"}],
-    "name": "getProductHistory",
-    "outputs": [{"name": "", "type": "tuple[]", "components": [{"name": "newState", "type": "uint8"}, {"name": "timestamp", "type": "uint256"}, {"name": "actor", "type": "address"}, {"name": "location", "type": "string"}, {"name": "notes", "type": "string"}]}],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_productId", "type": "uint256"}, {"name": "_newOwner", "type": "address"}],
-    "name": "transferProduct",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_productId", "type": "uint256"}, {"name": "_newState", "type": "uint8"}, {"name": "_notes", "type": "string"}],
-    "name": "changeProductState",
-    "outputs": [],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_productId", "type": "uint256"}],
-    "name": "purchaseProduct",
-    "outputs": [],
-    "type": "function",
-    "payable": true
-  },
-  {
-    "inputs": [],
-    "name": "getAllProducts",
-    "outputs": [{"name": "", "type": "uint256[]"}],
-    "type": "function"
-  },
-  {
-    "inputs": [{"name": "_actor", "type": "address"}],
-    "name": "getActor",
-    "outputs": [{"name": "", "type": "tuple", "components": [{"name": "actorAddress", "type": "address"}, {"name": "name", "type": "string"}, {"name": "location", "type": "string"}, {"name": "actorType", "type": "string"}, {"name": "isActive", "type": "bool"}, {"name": "registrationDate", "type": "uint256"}]}],
-    "type": "function"
-  }
-];
+// Use the ABI from the deployed contract
+const CONTRACT_ABI = SupplyChainContract.abi;
 
 const PRODUCE_TYPES = ['Fruits', 'Vegetables', 'Grains', 'Dairy', 'Meat', 'Other'];
 const STATE_NAMES = ['Harvested', 'Processed', 'Shipped', 'Received', 'Sold'];
@@ -101,23 +46,95 @@ function App() {
 
   const initializeWeb3 = async () => {
     try {
+      console.log('Initializing Web3...');
+      
       if (window.ethereum) {
+        console.log('MetaMask detected');
         const web3Instance = new Web3(window.ethereum);
+        
+        // Request account access
         await window.ethereum.request({ method: 'eth_requestAccounts' });
+        console.log('Accounts requested');
+        
+        // Check network
+        const networkId = await web3Instance.eth.net.getId();
+        console.log('Network ID:', networkId);
+        
+        if (networkId !== 1337) {
+          console.log('Wrong network detected, attempting to switch...');
+          try {
+            // Try to switch to the correct network
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x539' }], // 1337 in hex
+            });
+            console.log('Network switched successfully');
+          } catch (switchError) {
+            // If network doesn't exist, add it
+            if (switchError.code === 4902) {
+              try {
+                await window.ethereum.request({
+                  method: 'wallet_addEthereumChain',
+                  params: [{
+                    chainId: '0x539',
+                    chainName: 'Ganache Local',
+                    rpcUrls: ['http://127.0.0.1:7545'],
+                    nativeCurrency: {
+                      name: 'ETH',
+                      symbol: 'ETH',
+                      decimals: 18
+                    }
+                  }]
+                });
+                console.log('Network added and switched');
+              } catch (addError) {
+                alert('Please manually add Ganache network to MetaMask');
+                return;
+              }
+            } else {
+              alert(`Please switch to Ganache network (Chain ID: 1337). Current network: ${networkId}`);
+              return;
+            }
+          }
+        }
         
         const accounts = await web3Instance.eth.getAccounts();
-        const contractInstance = new web3Instance.eth.Contract(SUPPLY_CHAIN_ABI, SUPPLY_CHAIN_ADDRESS);
+        console.log('Accounts:', accounts);
+        
+        if (accounts.length === 0) {
+          alert('No accounts found. Please unlock MetaMask.');
+          return;
+        }
+        
+        // Test connection to Ganache
+        const blockNumber = await web3Instance.eth.getBlockNumber();
+        console.log('Current block number:', blockNumber);
+        
+        const contractInstance = new web3Instance.eth.Contract(CONTRACT_ABI, SUPPLY_CHAIN_ADDRESS);
+        console.log('Contract instance created at:', SUPPLY_CHAIN_ADDRESS);
+        
+        // Test contract connection
+        try {
+          const totalProducts = await contractInstance.methods.getTotalProducts().call();
+          console.log('Contract connected successfully. Total products:', totalProducts);
+        } catch (contractError) {
+          console.error('Contract connection failed:', contractError);
+          alert('Failed to connect to smart contract. Please check if contracts are deployed.');
+          return;
+        }
         
         setWeb3(web3Instance);
         setAccounts(accounts);
         setContract(contractInstance);
         setCurrentAccount(accounts[0]);
+        
+        console.log('Web3 initialization complete');
       } else {
         alert('Please install MetaMask to use this application');
       }
     } catch (error) {
       console.error('Error initializing Web3:', error);
-      alert('Error connecting to Web3. Make sure MetaMask is connected and Ganache is running on port 7545.');
+      alert(`Error connecting to Web3: ${error.message}. Make sure MetaMask is connected and Ganache is running on port 7545.`);
     }
   };
 
@@ -126,21 +143,58 @@ function App() {
       const actor = await contract.methods.getActor(currentAccount).call();
       if (actor.isActive) {
         setCurrentActor(actor);
+      } else {
+        setCurrentActor(null);
       }
     } catch (error) {
       console.error('Error loading actor data:', error);
+      setCurrentActor(null);
+    }
+  };
+
+  const switchAccount = async () => {
+    try {
+      const newAccounts = await web3.eth.getAccounts();
+      if (newAccounts.length > 0) {
+        // Find next account or first if at end
+        const currentIndex = accounts.indexOf(currentAccount);
+        const nextIndex = (currentIndex + 1) % newAccounts.length;
+        const newAccount = newAccounts[nextIndex];
+        
+        setCurrentAccount(newAccount);
+        setAccounts(newAccounts);
+        
+        // Load actor data for new account
+        const actor = await contract.methods.getActor(newAccount).call();
+        if (actor.isActive) {
+          setCurrentActor(actor);
+        } else {
+          setCurrentActor(null);
+        }
+        
+        console.log('Switched to account:', newAccount);
+      }
+    } catch (error) {
+      console.error('Error switching accounts:', error);
     }
   };
 
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const productIds = await contract.methods.getAllProducts().call();
+      const totalProducts = await contract.methods.getTotalProducts().call();
+      console.log('Total products:', totalProducts);
       const productsData = [];
 
-      for (const id of productIds) {
-        const product = await contract.methods.getProduct(id).call();
-        productsData.push(product);
+      for (let i = 1; i <= totalProducts; i++) {
+        try {
+          const product = await contract.methods.getProduct(i).call();
+          if (product.exists) {
+            productsData.push({id: i, ...product});
+          }
+        } catch (err) {
+          console.log('Product', i, 'not found or error:', err.message);
+        }
       }
 
       setProducts(productsData);
@@ -301,10 +355,28 @@ function App() {
       <header className="App-header">
         <h1>Farm Supply Chain Management</h1>
         <div className="account-info">
-          <p>Connected Account: {currentAccount}</p>
-          {currentActor && (
-            <p>Registered as: {currentActor.name} ({currentActor.actorType})</p>
-          )}
+          <div>
+            <p>Connected Account: {currentAccount.slice(0, 6)}...{currentAccount.slice(-4)}</p>
+            {currentActor && (
+              <p>Registered as: {currentActor.name} ({currentActor.actorType})</p>
+            )}
+          </div>
+          <button 
+            className="switch-account-btn"
+            onClick={switchAccount}
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              padding: '0.5rem 1rem',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '0.9rem',
+              marginLeft: '1rem'
+            }}
+          >
+            Switch Account
+          </button>
         </div>
       </header>
 
