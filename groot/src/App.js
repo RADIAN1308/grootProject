@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import './AppNew.css';
 import SupplyChainContract from './contracts/SupplyChain.json';
+import EnvironmentalMonitor from './components/EnvironmentalMonitor';
 
 // You'll need to update this with your deployed contract address after migration
-const SUPPLY_CHAIN_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || '0x3910543030Af385ffD1B8Ed4242D02C101df3A8D';
+const SUPPLY_CHAIN_ADDRESS = process.env.REACT_APP_CONTRACT_ADDRESS || '0x2A12257439e660910d5faaEeEA191bE6DcBd3201';
 
 // Use the ABI from the deployed contract
 const CONTRACT_ABI = SupplyChainContract.abi;
@@ -533,6 +534,12 @@ function App() {
         >
           Manage Products
         </button>
+        <button 
+          className={activeTab === 'environmental' ? 'active' : ''} 
+          onClick={() => setActiveTab('environmental')}
+        >
+          🌡️ Environmental
+        </button>
       </nav>
 
       <main className="main-content">
@@ -814,6 +821,16 @@ function App() {
                 </button>
               </form>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'environmental' && (
+          <div className="tab-content">
+            <div className="dashboard-header">
+              <h2>🌡️ Environmental Monitoring</h2>
+              <p>Real-time temperature and humidity tracking for your products using ESP32 DHT11 sensors</p>
+            </div>
+            <EnvironmentalMonitor />
           </div>
         )}
       </main>

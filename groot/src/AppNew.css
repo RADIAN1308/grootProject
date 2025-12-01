@@ -735,6 +735,131 @@ body {
   }
 }
 
+/* IoT Environmental Monitoring Styles */
+.environmental-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.environmental-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8faf7 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.environmental-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.environmental-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.sensor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sensor-icon {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+
+.quality-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.quality-optimal {
+  background: #d4edda;
+  color: #155724;
+}
+
+.quality-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.quality-critical {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.sensor-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  transition: color 0.3s ease;
+}
+
+.temp-optimal { color: #4caf50; }
+.temp-warning { color: #ff9800; }
+.temp-critical { color: #f44336; }
+
+.humidity-optimal { color: #2196f3; }
+.humidity-warning { color: #ff9800; }
+.humidity-critical { color: #f44336; }
+
+.sensor-unit {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  margin-left: 0.5rem;
+}
+
+.sensor-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.device-info {
+  opacity: 0.8;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.iot-timeline {
+  position: relative;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.iot-timeline::-webkit-scrollbar {
+  width: 6px;
+}
+
+.iot-timeline::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.iot-timeline::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   * {
