@@ -80,7 +80,7 @@ STEP 4: CONFIGURE METAMASK
 2. Add Ganache Network:
    - Network Name: Ganache Local
    - RPC URL: http://127.0.0.1:7545
-   - Chain ID: 1337
+   - Chain ID: 5777 (or 1337 if configured differently)
    - Currency Symbol: ETH
 
 3. Import Ganache Account:
@@ -384,7 +384,8 @@ truffle test
 
 NETWORK INFORMATION:
 - Local RPC: http://127.0.0.1:7545
-- Chain ID: 1337
+- Chain ID: 5777 (or 1337 if configured differently)
+- Current Contract Address: 0xcCDaD05bDff33651A6777dcc3fa72C9317174e35
 - Frontend: http://localhost:3000
 - Gas Limit: 6721975
 
